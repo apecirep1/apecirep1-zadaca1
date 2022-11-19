@@ -4,6 +4,8 @@ import java.util.Stack;
 
 public class ExpressionEvaluator {
 
+    ExpressionEvaluator(){}
+
 
     private static Stack<String> ops = new Stack<> ();
     private static Stack<Double> vals = new Stack<> ();
@@ -28,12 +30,12 @@ public class ExpressionEvaluator {
         int rightpar = 0;
         for(String s: parstr) {
             if (s.equals("(")){
-                leftpar = leftpar + 1;
+                leftpar += 1;
             }
 
 
             if (s.equals(")")){
-                rightpar = rightpar + 1;
+                rightpar =+ 1;
             }
         }
 
@@ -57,6 +59,44 @@ public class ExpressionEvaluator {
 
         return res;
     }
+
+    public static double evaluate(String s) {
+        String[] arrStr = parsedStr(s);
+        for (String str : arrStr) {
+            double l = 0;
+            if(str.equals(")")) {
+                while (!(ops.peek()).equals("(")) {
+                    String operand = ops.pop();
+                    if(operand.equals("sqrt")){
+                        double t, res;
+                        t = vals.pop();
+                        res = val(operand, t, t);
+                        vals.push(res);
+                    }
+                    else {
+                        double x1, x2;
+                        x2 = vals.pop();
+                        x1 = vals.pop();
+                        double x;
+                        x = val(operand, x1, x2);
+                        vals.push(x);
+                    }
+                }
+                ops.pop();
+            }else if (!(str.equals(")"))) {
+                if (str.equals("+") || str.equals("-") || str.equals("*") || str.equals("/") || str.equals("sqrt") || str.equals("(")){
+                    ops.push(str);
+                }else {
+                    l = Double.parseDouble(str);
+                    vals.push(l);
+                }
+            }
+
+        }
+        return vals.pop();
+    }
+
+
 
 
 }
